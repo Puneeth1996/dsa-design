@@ -1,0 +1,79 @@
+4th Sept 2023
+
+How to use Leet Code Effectively
+
+
+
+- Start with Easy and High Acceptance. Than Progress to Easy and Lesser Acceptance. ... Medium and Higher.
+
+- Take up interview question, and also search SDE Sheet Interview Questions.
+
+- Start with a problem, check the like and dislike ratio, avoid those where many dislikes are present.
+
+- To check the solution for a problem. Even if non premium account, check the discussion form. Check the "most votes" section and replies in them.
+
+
+-Consistance for 6-7 months. With Easy, medium , hard problems. Keep 1(Easy) : 2(Medium) : 1(Hard). Participate in Leetcode challenges, would be similar to interview situations.
+This would help in refferal to big tech companies with LeetCode and Compitative Programming.
+
+
+- start with different topic in order as per learning order. Make your own learning notes on each topic as you face them.
+
+- Maintain good Leet code profile. 
+
+
+
+
+Books 
+- Cracking the coding interview - Gayle Lakkaman
+- Algo expert - coding interview question
+- Blind 75 leet code problems
+- Elements of Programming Interview in Python - Adnan Aziz
+- educative.ico  groking the coding interview: Patterns for coding Questions
+- Top leet code questions for company
+- Leet code company wise solutions : https://github.com/krishnadey30/LeetCode-Questions-CompanyWise
+
+
+
+Road Map : https://vritika.medium.com/roadmap-to-learning-data-structures-and-algorithms-dsa-8fbc375b5701
+
+
+
+This Can give Topics to Cover: 
+https://github.com/The-CODE-Plus-Plus-Community/Competitive-Programming-and-DSA/blob/main/ROADMAP.md
+
+https://github.com/yuvrajverma01/Data-Structures-And-Algorithms-Roadmap
+
+
+
+Genral Order Of Topics
+
+    Array
+    String
+    LinkedList 
+    Searchin
+    Sorting
+    Divide & Conquer
+    Stack
+    Queue
+    Tree
+    Graph
+    Greedy
+    Recursion
+    Backtracking
+    Dynamic Programming
+
+
+
+
+ALGORITHMS YOU SHOULD KNOW AND MASTER
+    DFS and BFS Traversals
+    Dijkstra’s Algorithm for Shortest Path
+    Prim’s and Kruskal’s For Minimum Spanning Tree
+    0–1 Knapsack Problem
+    Subset Sum Problem
+    Longest Common Subsequence
+    Longest Increasing Subsequence
+    Modular Exponentiation
+    Sum of Bit Differences among All Pairs
+
