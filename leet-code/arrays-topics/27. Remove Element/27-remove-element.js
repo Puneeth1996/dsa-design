@@ -13,8 +13,8 @@ module.exports = removeElement
 /*
 Time Complexity: O(n)
 Space Complexity: O(1)
-1. Create index variable (starting at 0.
-2. Loop through index.
+1. Create index variable index starting at 0.
+2. Loop through length.
     a. Condition if current value doesn't equal "val".
         i. Set nums[index] to nums[i].
         ii. Increment index.
