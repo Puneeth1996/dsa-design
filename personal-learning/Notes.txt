@@ -1,0 +1,17 @@
+1. Time and Space Complexity
+Oct 3rd, 2023
+
+Time Complexity : 
+
+    Number of cpu cycles
+
+
+
+Space Complexity : 
+
+    No of additional stack ques created.
+
+
+
+
+
