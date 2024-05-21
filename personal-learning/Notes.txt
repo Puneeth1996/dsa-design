@@ -14,4 +14,19 @@ Space Complexity :
 
 
 
+Jackson Kailath DSA Course 
+
+Points to discuss once you get any question 
+- clarification question in interview 
+    - As about boundary conditions or edge cases
+- test cases should be written with interviwer 
+
+
+1. Day 1 Arrays 
+
+
+Time and space Complexity - https://www.bigocheatsheet.com/
+
+
+2. Day 2 Arrays
 
