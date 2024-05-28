@@ -44,3 +44,13 @@ Time and space Complexity - https://www.bigocheatsheet.com/
 
 26 May 2024
 5. Day 5  Recursion
+
+
+28 May 2024
+6. Day 6  String
+    reading the character at given index in string is O(1) for time and space Complexity
+    traversing through string is O(n) for time O(1) for space Complexity
+    copying a string O(n) for time and space Complexity
+    appending a string O(n) for time and space Complexity
+    concatenation a string O(n+m) for time and space Complexity
+
