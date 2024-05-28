@@ -44,7 +44,8 @@
 //     return true;
 // }
 
-var isPalindrome = function (string) {
+var isPalindrome = function (s) {
+	var string = s.toLowerCase().replace(/[\W_]/g, '')
 	let i = 0
 	let j = string.length - 1
 	while (i <= j) {
