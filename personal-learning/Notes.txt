@@ -54,3 +54,15 @@ Time and space Complexity - https://www.bigocheatsheet.com/
     appending a string O(n) for time and space Complexity
     concatenation a string O(n+m) for time and space Complexity
 
+
+5 June 2024
+7. Day 7  String
+    3. Longest Substring Without Repeating Characters
+    Involves learning of sliding window pattern to get the length of the largest string
+
+    49. Group Anagrams
+
+
+
+6 June 2024
+8. Day 8 Searching
