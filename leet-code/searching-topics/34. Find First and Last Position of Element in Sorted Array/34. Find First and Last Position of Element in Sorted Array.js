@@ -99,3 +99,13 @@ var searchRange = function (array, target) {
 	const rightExtreme = findRightExtreme(array, target)
 	return [leftExtreme, rightExtreme]
 }
+
+// Notes
+// Array is sorted
+// Problem requires O(logn) time complexity
+// In either iterative or recursive solution we are going to use binary search
+// We are going to find the target value index of left and right extremes
+// value(middle) is equal to target
+// if m=0 the leftorrightextreme = 0
+// if previous value is less than target  right pointer = midlle -1 and then repeat the above 2 steps
+// once left / right = midlle then take the leftorrightextreme as middle index and the return values
