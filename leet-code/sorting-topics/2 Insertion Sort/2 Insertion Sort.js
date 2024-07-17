@@ -1,6 +1,7 @@
 // Time complexity O(n^2)
 // Space complexity S(1)
-
+// Insertion sort is a stable sort algorithm
+// Stable sortalgorithm previous arrangment is not changed with respect to relative positioning
 const insertionSort = function (arr) {
 	for (let i = 1; i < arr.length; i++) {
 		let currentValue = arr[i]
