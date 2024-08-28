@@ -66,3 +66,109 @@ Time and space Complexity - https://www.bigocheatsheet.com/
 
 10 July 2024 & 11 July 2024
 8. Day 8 Searching
+
+
+
+
+
+
+
+Aug 27th, 2024
+
+11.30am 
+
+Master the Coding Interview DSA
+
+
+1 Getting more interviews
+master-the-interview.png
+https://www.resumemaker.online/
+
+
+Resume Cheat Sheet
+✅ Use a pre-designed resume template
+✅ Make the resume fit on 1 page
+✅ Include words from job description
+✅ Include company name you are applying to
+✅ Does your first item on your resume reflect what they are looking for?
+✅ Experience titles demonstrate value
+✅ Do you have an online link?
+✅ Remove the word “I”
+✅ No buzzwords describing how great you are
+✅ Are you using Action words?
+✅ Measure everything in terms of impact, don’t just describe your responsibilities
+✅ Technical Knowledge/Skills should include what they are looking for. Only show years if it is impressive
+✅ Include only sections/items that are impressive: Experience, Projects, Education, Technical Skills
+✅ No typos or bad grammar
+
+
+
+
+https://www.jobscan.co/
+
+https://www.cakeresume.com/Engineering-resume-samples
+
+
+https://thisresumedoesnotexist.com/
+
+
+28 Aug 2024 
+10.30am 
+
+#Big O Cheat Sheet:
+
+-Big Os
+O(1) Constant- no loops
+ O(log N) Logarithmic- usually searching algorithms have log n if they are sorted (Binary Search)
+ O(n) Linear- for loops, while loops through n items
+ O(n log(n)) Log Liniear- usually sorting operations
+ O(n^2) Quadratic- every element in a collection needs to be compared to ever other element. Two
+ nested loops
+ O(2^n) Exponential- recursive algorithms that solves a problem of size N
+ O(n!) Factorial- you are adding a loop for every element
+
+
+
+Iterating through half a collection is still O(n)
+Two separate collections: O(a * b)-What can cause time in a function?
+
+Operations (+, -, *, /)
+ Comparisons (<, >, ==)
+ Looping (for, while)
+ Outside Function call (function())-Rule Book
+
+
+Rule 1: Always worst Case
+Rule 2: Remove Constants
+Rule 3: Different inputs should have different variables. O(a+b). A and B arrays nested would be
+ O(a*b)
+ + for steps in order
+ * for nested steps
+Rule 4: Drop Non-dominant terms-What causes Space complexity?
+ Variables
+ Data Structures
+ Function Call
+ Allocations
+
+
+
+- Heap is where variables are stored and stacks are where function calls are stored
+
+
+which code is better 
+
+readiabilty + Memory and speed 
+
+Data structure + Algortithm = Program
+
+Interview 
+Skills - Analytical - coding - Technical - communication
+
+
+
+
+
+
+
+
+
