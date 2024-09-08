@@ -77,3 +77,15 @@ ALGORITHMS YOU SHOULD KNOW AND MASTER
     Modular Exponentiation
     Sum of Bit Differences among All Pairs
 
+
+
+Sept 8th 2024 
+12.30pm 
+
+Different Patterns 
+
+- Frequency counter 
+- Two pointer pattern 
+- sliding window pattern 
+- Divide and Conquer pattern
+
