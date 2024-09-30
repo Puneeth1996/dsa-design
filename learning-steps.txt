@@ -79,6 +79,7 @@ ALGORITHMS YOU SHOULD KNOW AND MASTER
 
 
 
+
 Sept 8th 2024 
 12.30pm 
 
@@ -89,3 +90,16 @@ Different Patterns
 - sliding window pattern 
 - Divide and Conquer pattern
 
+Sorting Algorithm - 
+
+- Bubble : Here the items which are largest are bubbled up and optimization we check if in any iteration there are no swaps we can say the array is close to sorted. Time complexity O(n2)
+
+- selection sort : Similar to bubble sort, Minimum item is put in postion every iteration.Time complexity O(n2)
+
+- insertion sort : i and j two loops, currIdx = a[i], i = 1, j = i-1 and loop till j >0 and check if a[j] > currIdx  and a[j+1] = a[j] inside j loop and outside j loop a[j+1] = currIdx. Time complexity O(n2)
+ 
+- merge sort : split the items of array to single element and then merge them back to sorted order . Time complexity O(n logn)
+
+- quick sort : select pivot and move the elemets to right postion with all left values being less than postion and right being higher than selected pivot . Time complexity O(n logn)
+
+- radix sort :  find the largest number, and make other wiht prefixing to zeros and then sort based on the positioning
