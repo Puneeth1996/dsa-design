@@ -1,0 +1,32 @@
+/**
+ * @param {string} s
+ * @param {string} t
+ * @return {character}
+ */
+var findTheDifference = function (source, target) {
+	// Convert the 'target' string into an array of its characters,
+	// then use the 'reduce' function to accumulate the sum of the char codes.
+	const targetCharCodeSum = [...target].reduce(
+		(runningTotal, currentChar) => runningTotal + currentChar.charCodeAt(0),
+		0
+	)
+
+	// Convert the 'source' string into an array of its characters,
+	// then use the 'reduce' function to accumulate the sum of the char codes.
+	const sourceCharCodeSum = [...source].reduce(
+		(runningTotal, currentChar) => runningTotal + currentChar.charCodeAt(0),
+		0
+	)
+
+	// Find the difference in the accumulated char code sums between the 'target' and 'source' strings.
+	// This difference is the char code of the added letter in the 'target' string.
+	const charCodeDifference = targetCharCodeSum - sourceCharCodeSum
+
+	// Convert the char code of the added letter to a string and return it.
+	return String.fromCharCode(charCodeDifference)
+}
+findTheDifference('abcd', 'abcde')
+findTheDifference('', 'y')
+
+// Time Complexity O(n)
+// Space Complexity - S(1)
