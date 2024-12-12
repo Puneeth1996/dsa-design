@@ -14,3 +14,5 @@ var construct2DArray = function (original, m, n) {
 	}
 	return ans
 }
+
+// Time complexity T(m * n)
