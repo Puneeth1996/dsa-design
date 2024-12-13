@@ -16,3 +16,4 @@ var minLength = function (s) {
 	}
 	return stk.length
 }
+// Time and space complexity are O(n) lenght of the string
