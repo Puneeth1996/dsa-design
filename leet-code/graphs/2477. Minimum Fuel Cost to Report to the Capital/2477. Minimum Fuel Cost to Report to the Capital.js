@@ -61,7 +61,7 @@ var minimumFuelCost = function (roads, seats) {
 			}
 		}
 
-		return nodeData
+		return
 	}
 
 	// Start DFS from the capital (node 0)
