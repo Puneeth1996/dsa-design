@@ -4,27 +4,98 @@
  * @param {number} k
  * @return {number}
  */
-var maxScore = function (nums1, nums2, k) {
-	let result = 0
-	let totalSum = 0
-	let heap = new MinPriorityQueue({ priority: (element) => element })
 
-	const merged = nums1.map((nums1Val, i) => [nums2[i], nums1Val])
-	merged.sort((a, b) => b[0] - a[0])
+class MinHeap {
+	constructor() {
+		this.heap = []
+	}
 
-	for (const [maxOf2, num1Val] of merged) {
-		if (heap.size() === k) {
-			totalSum -= heap.dequeue().element
-		}
+	insertEleAndShift(ele) {
+		this.heap.push(ele)
 
-		totalSum += num1Val
-		heap.enqueue(num1Val)
+		let i = this.heap.length
 
-		if (heap.size() === k) {
-			result = Math.max(result, totalSum * maxOf2)
+		while (i > 1) {
+			let p = Math.floor(i / 2)
+
+			if (this.heap[p - 1] > this.heap[i - 1]) {
+				;[this.heap[p - 1], this.heap[i - 1]] = [
+					this.heap[i - 1],
+					this.heap[p - 1],
+				]
+
+				i = p
+			} else {
+				return
+			}
 		}
 	}
 
-	return result
+	heapify() {
+		let i = 1
+
+		while (i < this.heap.length) {
+			let l = 2 * i
+			let r = 2 * i + 1
+			let si = i
+
+			if (this.heap[l - 1] < this.heap[i - 1]) {
+				si = l
+			}
+			if (this.heap[r - 1] < this.heap[si - 1]) {
+				si = r
+			}
+
+			if (si != i) {
+				;[this.heap[i - 1], this.heap[si - 1]] = [
+					this.heap[si - 1],
+					this.heap[i - 1],
+				]
+				i = si
+			} else {
+				return
+			}
+		}
+	}
+
+	popMin() {
+		let l = this.heap.length
+		;[this.heap[0], this.heap[l - 1]] = [this.heap[l - 1], this.heap[0]]
+		let ele = this.heap.pop()
+		this.heapify()
+		return ele
+	}
+}
+
+var maxScore = function (a, b, k) {
+	const arr = []
+
+	for (let i = 0; i < a.length; i++) {
+		arr.push([a[i], b[i]])
+	}
+
+	arr.sort((x, y) => y[1] - x[1])
+
+	let minHeap = new MinHeap()
+
+	let res = 0
+	let sum = 0
+
+	for (let i = 0; i < arr.length; i++) {
+		sum += arr[i][0]
+		minHeap.insertEleAndShift(arr[i][0])
+
+		if (minHeap.heap.length > k) {
+			let min = minHeap.popMin()
+			sum -= min
+		}
+
+		if (minHeap.heap.length == k) {
+			let score = sum * arr[i][1]
+			res = Math.max(res, score)
+		}
+	}
+
+	return res
 }
 // Time Complexity: O(n log(k)) Space Complexity: O(k)
