@@ -30,3 +30,4 @@ var stoneGameII = function (piles) {
 
 	return dp[0][1]
 }
+// Time complexity O(n3) space complexity  O(n 2 )
