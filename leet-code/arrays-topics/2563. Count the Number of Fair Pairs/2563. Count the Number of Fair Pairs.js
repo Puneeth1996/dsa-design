@@ -4,34 +4,38 @@
  * @param {number} upper
  * @return {number}
  */
-var countFairPairs = function (v, lower, upper) {
-	v.sort((a, b) => a - b)
-	let ans = 0
-
-	for (let i = 0; i < v.length - 1; i++) {
-		const low = lowerBound(v, lower - v[i], i + 1)
-		const up = upperBound(v, upper - v[i], i + 1)
-		ans += up - low
+var countFairPairs = (nums, lower, upper) => {
+	// Binary search function to find the index of the first number in `sortedNums`
+	// that is greater than or equal to `target`, starting the search from index `left`.
+	const binarySearch = (target, left) => {
+		let right = nums.length
+		while (left < right) {
+			const mid = (left + right) >> 1
+			if (nums[mid] >= target) {
+				right = mid
+			} else {
+				left = mid + 1
+			}
+		}
+		return left
 	}
-	return ans
-}
 
-function lowerBound(v, target, start) {
-	let end = v.length
-	while (start < end) {
-		let mid = Math.floor((start + end) / 2)
-		if (v[mid] >= target) end = mid
-		else start = mid + 1
-	}
-	return start
-}
+	// Sort the array in non-descending order.
+	nums.sort((a, b) => a - b)
 
-function upperBound(v, target, start) {
-	let end = v.length
-	while (start < end) {
-		let mid = Math.floor((start + end) / 2)
-		if (v[mid] > target) end = mid
-		else start = mid + 1
+	// Initialize the count of fair pairs to zero.
+	let fairPairCount = 0
+
+	// Iterate through the array to count fair pairs.
+	for (let i = 0; i < nums.length; ++i) {
+		// Find the starting index 'j' for the valid pairs with nums[i]
+		const startIdx = binarySearch(lower - nums[i], i + 1)
+		// Find the ending index 'k' for the valid pairs with nums[i]
+		const endIdx = binarySearch(upper - nums[i] + 1, i + 1)
+		// The number of valid pairs with nums[i] is the difference between these indices
+		fairPairCount += endIdx - startIdx
 	}
-	return start
+
+	// Return the total count of fair pairs.
+	return fairPairCount
 }
