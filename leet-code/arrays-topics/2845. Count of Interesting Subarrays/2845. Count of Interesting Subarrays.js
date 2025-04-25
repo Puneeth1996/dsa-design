@@ -4,7 +4,7 @@
  * @param {number} k
  * @return {number}
  */
-var countInterestingSubarrays = function (nums, modulo, k) {
+var countInterestingSubarrays = function (nums, m, k) {
 	let count = 0
 	let total = 0
 	const map = new Map()
