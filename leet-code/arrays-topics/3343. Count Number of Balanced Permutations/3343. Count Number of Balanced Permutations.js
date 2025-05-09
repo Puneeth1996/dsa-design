@@ -76,3 +76,5 @@ var countBalancedPermutations = function (num) {
 	// Return the result for the target sum with the maximum number of odd digits
 	return Number(f[target][maxOdd])
 }
+// Time complexity: O(n 3 ) in the worst case due to triple nested loops in Pascal and DP.
+// Space complexity: O(n 3 ) for storing DP and combinatorial values.
