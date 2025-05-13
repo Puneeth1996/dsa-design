@@ -6,11 +6,9 @@
 var lengthAfterTransformations = function (s, t) {
 	const MOD = 1e9 + 7
 	let count_freq = new Array(26).fill(0)
-
 	for (const chr of s) {
 		count_freq[chr.charCodeAt(0) - 'a'.charCodeAt(0)]++
 	}
-
 	for (let i = 0; i < t; i++) {
 		const temp_count_freq = new Array(26).fill(0)
 		for (let j = 0; j < 26; j++) {
@@ -25,6 +23,6 @@ var lengthAfterTransformations = function (s, t) {
 		}
 		count_freq = [...temp_count_freq] // deep copy of any array
 	}
-
 	return count_freq.reduce((len, c) => (len + c) % MOD, 0)
 }
+// T(t) S(1)
