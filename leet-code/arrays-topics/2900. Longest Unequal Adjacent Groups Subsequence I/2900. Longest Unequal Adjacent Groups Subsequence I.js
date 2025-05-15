@@ -14,4 +14,5 @@ var getLongestSubsequence = function (words, groups) {
 	}
 	return result
 }
-// Time And Space Complexity S(1)
+// Time Complexity: O(n). 
+// Space Complexity: O(n).
