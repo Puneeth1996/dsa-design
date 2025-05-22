@@ -112,7 +112,7 @@ var maxRemoval = function (nums, queries) {
 
 	for (let i = 0; i < n; i++) {
 		// Push all queries starting at or before index i
-		while (qIdx < queries.length && queries[n][0] <= i) {
+		while (qIdx < queries.length && queries[qIdx][0] <= i) {
 			maxHeap.push(queries[qIdx][1])
 			qIdx++
 		}
