@@ -3,22 +3,30 @@
  * @return {number}
  */
 var longestPalindrome = function (words) {
-	let length = 0
+	const freq = {}
+	for (let word of words) {
+		freq[word] = (freq[word] || 0) + 1
+	}
+
+	let ans = 0
 	let hasCenter = false
-	for (const word of words) {
-		const reversed = word[1] + word[0]
-		if (map.has(reversed) && map.get(reversed) > 0) {
-			length += 4
-			map.set(reversed, map.get(reversed) - 1)
-		} else {
-			map.set(word, (map.get(word) || 0) + 1)
+
+	for (let word in freq) {
+		const rev = word[1] + word[0]
+		const count = freq[word]
+
+		if (word === rev) {
+			ans += Math.floor(count / 2) * 4
+			if (count % 2 === 1) hasCenter = true
+		} else if (freq[rev]) {
+			const pairs = Math.min(count, freq[rev])
+			ans += pairs * 4
+			freq[rev] = 0 // mark reverse as used
 		}
+
+		freq[word] = 0 // mark as used
 	}
-	for (const [word, count] of map) {
-		if (word[0] === word[1] && count > 0) {
-			hasCenter = true
-			break
-		}
-	}
-	return hasCenter ? length + 2 : length
+
+	if (hasCenter) ans += 2
+	return ans
 }
