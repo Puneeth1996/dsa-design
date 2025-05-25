@@ -21,10 +21,10 @@ var longestPalindrome = function (words) {
 		} else if (freq[rev]) {
 			const pairs = Math.min(count, freq[rev])
 			ans += pairs * 4
-			freq[rev] = 0 // mark reverse as used
+			freq[rev] = 0
 		}
 
-		freq[word] = 0 // mark as used
+		freq[word] = 0
 	}
 
 	if (hasCenter) ans += 2
