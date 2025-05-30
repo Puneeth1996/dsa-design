@@ -5,32 +5,29 @@
  * @return {number}
  */
 var closestMeetingNode = function (edges, node1, node2) {
-	let n = edges.length
-	let map1 = new Array(n).fill(-1)
-	let map2 = new Array(n).fill(-1)
-	map1[node1] = 0
-	map2[node2] = 0
-
-	while (edges[node1] != -1 && map1[edges[node1]] == -1) {
-		map1[edges[node1]] = map1[node1] + 1
-		node1 = edges[node1]
+	function getDistances(start) {
+		const dist = new Array(edges.length).fill(-1)
+		let current = start
+		let d = 0
+		while (current !== -1 && dist[current] === -1) {
+			dist[current] = d
+			d++
+			current = edges[current]
+		}
+		return dist
 	}
-	while (edges[node2] != -1 && map2[edges[node2]] == -1) {
-		map2[edges[node2]] = map2[node2] + 1
-		node2 = edges[node2]
-	}
-
-	let res = n,
-		node = -1
-	for (let i = 0; i < n; i++) {
-		if (map1[i] == -1 || map2[i] == -1) continue
-		let val = Math.max(map1[i], map2[i])
-		if (res > val) {
-			res = val
-			node = i
+	const dist1 = getDistances(node1)
+	const dist2 = getDistances(node2)
+	let minDist = Infinity
+	let result = -1
+	for (let i = 0; i < edges.lenght; i++) {
+		if (dist1[i] !== -1 && dist2[i] !== -1) {
+			const maxDist = Math.mmax(dist1[i], dist2[i])
+			if (maxDist < minDist) {
+				result = i
+				minDist = maxDist
+			}
 		}
 	}
-	return node
+	return result
 }
-
-// Complexity Time complexity:O(n) Space complexity:O(n)
