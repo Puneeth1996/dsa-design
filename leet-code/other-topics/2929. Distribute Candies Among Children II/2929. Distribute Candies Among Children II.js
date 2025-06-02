@@ -31,10 +31,7 @@ function distributeCandies(n, limit) {
 		}
 		return res
 	}
-
 	let totalWays = 0
-
-	// Inclusion-Exclusion principle
 	for (let k = 0; k <= 3; ++k) {
 		let sign = k % 2 === 0 ? 1 : -1
 		let val = n - k * (limit + 1)
