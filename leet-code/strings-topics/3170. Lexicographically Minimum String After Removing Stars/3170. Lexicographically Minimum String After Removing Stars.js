@@ -23,3 +23,5 @@ var clearStars = function (s) {
 
 	return stack.filter((ch) => ch !== '#').join('')
 }
+// Time Complexity: O(n^2)
+// Space Complexity: O(n)
