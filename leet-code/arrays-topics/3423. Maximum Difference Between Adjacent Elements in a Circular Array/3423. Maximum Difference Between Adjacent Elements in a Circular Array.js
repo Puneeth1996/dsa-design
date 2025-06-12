@@ -13,3 +13,5 @@ var maxAdjacentDistance = function (nums) {
 	}
 	return maxDiff
 }
+// Time Complexity: O(n), where n is the length of the input array `nums`.
+// Space Complexity: O(1), as we are using a constant amount of space for variables.
