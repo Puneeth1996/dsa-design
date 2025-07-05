@@ -16,3 +16,5 @@ var kthCharacter = function (k) {
 	}
 	return sb[k - 1]
 }
+// Time Complexity: O(k) as we generate characters until we reach the k-th character
+// Space Complexity: O(k) as we store the characters in an array
