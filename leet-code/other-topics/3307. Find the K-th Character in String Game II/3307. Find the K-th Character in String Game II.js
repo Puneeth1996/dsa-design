@@ -25,3 +25,5 @@ var kthCharacter = function (k, operations) {
 	const baseCharCode = 'a'.charCodeAt(0)
 	return String.fromCharCode((shift % 26) + baseCharCode)
 }
+// Time Complexity = O(log k) Because: Building lengths[] stops once length ≥ k → O(log k) The reverse loop over lengths[] is also at most O(log k)
+// Space Complexity lengths[] stores one value per operation until total length ≥ k So number of elements = O(log k)
