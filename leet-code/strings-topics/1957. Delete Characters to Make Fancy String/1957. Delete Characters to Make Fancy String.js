@@ -11,4 +11,4 @@ var makeFancyString = function (s) {
 	}
 	return ans
 }
-// Time and space complexity are O(n) lenght of the string
+// Time and space complexity are O(n) length of the string
