@@ -23,3 +23,4 @@ var new21Game = function (n, k, maxPts) {
 	}
 	return ans
 }
+// Time : O(n) Space : O(maxPts)
