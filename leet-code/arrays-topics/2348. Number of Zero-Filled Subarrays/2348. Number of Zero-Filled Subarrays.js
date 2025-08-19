@@ -3,16 +3,16 @@
  * @return {number}
  */
 var zeroFilledSubarray = function (nums) {
-	let totalSubarrays = 0
-	let currentZerosCount = 0
-	for (const value of nums) {
-		if (value === 0) {
-			currentZerosCount++
+	let ans = 0,
+		numSub = 0
+	for (const num of nums) {
+		if (num === 0) {
+			numSub++
 		} else {
-			currentZerosCount = 0
+			numSub = 0
 		}
-		totalSubarrays += currentZerosCount
+		ans += numSub
 	}
-	return totalSubarrays
+	return ans
 }
 // Time and Space Complexity O(n), where n is the length of the input list nums
