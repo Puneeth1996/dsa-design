@@ -11,3 +11,5 @@ var isOneBitCharacter = function (bits) {
 	}
 	return i === n - 1
 }
+// Time Complexity: O(n)
+// Space Complexity: O(1)
