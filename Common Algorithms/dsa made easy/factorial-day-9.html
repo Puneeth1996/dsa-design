@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Recursive Call Stack Visualizer</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7f7f7;
+            padding: 20px;
+            text-align: center;
+        }
+
+        #stack {
+            width: 340px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column-reverse;
+            gap: 15px;
+        }
+
+        .frame {
+            padding: 12px;
+            border-radius: 12px;
+            border: 3px solid black;
+            font-size: 18px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+            transition: 0.4s;
+        }
+
+        /* Dynamic color levels */
+        .level-1 {
+            background: #e4f1ff;
+            border-color: #3b82f6;
+        }
+
+        .level-2 {
+            background: #e8ffe6;
+            border-color: #22c55e;
+        }
+
+        .level-3 {
+            background: #fff0cc;
+            border-color: #f59e0b;
+        }
+
+        .level-4 {
+            background: #f2e5ff;
+            border-color: #a855f7;
+        }
+
+        .level-5 {
+            background: #ffe4e6;
+            border-color: #f43f5e;
+        }
+
+        .active {
+            outline: 4px solid #ffdd55;
+        }
+
+        .complete {
+            opacity: 0.9;
+        }
+
+        .value {
+            display: block;
+            font-size: 15px;
+            margin-top: 5px;
+            color: #333;
+            font-weight: bold;
+            min-height: 22px;
+        }
+
+        /* Computation animation */
+        .compute-anim {
+            animation: computeSlide 0.7s ease-out forwards;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        @keyframes computeSlide {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Arrow */
+        .arrow {
+            font-size: 30px;
+            color: #4a90e2;
+            animation: arrowBounce 0.8s infinite alternate;
+        }
+
+        @keyframes arrowBounce {
+            from {
+                transform: translateY(0);
+            }
+
+            to {
+                transform: translateY(-6px);
+            }
+        }
+
+        button {
+            padding: 10px 22px;
+            background: #4a90e2;
+            border: none;
+            color: white;
+            border-radius: 8px;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #3578c4;
+        }
+
+        .speed-control {
+            margin-top: 10px;
+            font-size: 16px;
+        }
+
+        #result {
+            margin-top: 30px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Factorial Call Stack Visualizer (Full Version)</h1>
+
+    <button onclick="start()">Start factorial(5)</button>
+    <button onclick="nextStep()">Next Step</button>
+    <button onclick="autoRun()">Auto Run</button>
+
+    <div class="speed-control">
+        Speed:
+        <input type="range" id="speed" min="100" max="1500" value="600">
+    </div>
+
+    <div id="stack"></div>
+
+    <div id="result"></div>
+
+    <script>
+        /* ---- Step Engine ---- */
+        let steps = [];
+        let index = 0;
+        let autoMode = false;
+
+        /* Auto-run */
+        async function autoRun() {
+            autoMode = true;
+            const slider = document.getElementById("speed");
+
+            while (autoMode && index < steps.length) {
+                steps[index++]();
+                await new Promise(r => setTimeout(r, slider.value));
+            }
+        }
+
+        function nextStep() {
+            autoMode = false;
+            if (index < steps.length) steps[index++]();
+        }
+
+        /* Start computation */
+        function start() {
+            autoMode = false;
+            steps = [];
+            index = 0;
+            document.getElementById("stack").innerHTML = "";
+            document.getElementById("result").innerText = "";
+
+            buildSteps(5, 1);
+
+            alert("Click NEXT STEP or use AUTO RUN.");
+        }
+
+        /* ------- Build Steps for Factorial -------- */
+        function buildSteps(n, level) {
+            const id = crypto.randomUUID();
+
+            steps.push(() => pushFrame(id, `factorial(${n})`, level));
+            steps.push(() => highlight(id));
+
+            if (n === 1) {
+                steps.push(() => setReturnValue(id, 1));
+                steps.push(() => popFrame(id));
+                return 1;
+            }
+
+            const returned = buildSteps(n - 1, level + 1);
+            const result = n * returned;
+
+            steps.push(() => animateCompute(id, n, returned, result));
+            steps.push(() => popFrame(id));
+
+            return result;
+        }
+
+        /* -------- UI Controls -------- */
+
+        function pushFrame(id, text, level) {
+            const stack = document.getElementById("stack");
+
+            const frame = document.createElement("div");
+            frame.className = `frame level-${((level - 1) % 5) + 1}`;
+            frame.id = id;
+            frame.innerHTML = `
+        ${text}
+        <span class="value"></span>
+    `;
+
+            if (stack.children.length > 0) {
+                const arrow = document.createElement("div");
+                arrow.className = "arrow";
+                arrow.innerText = "↑";
+                stack.appendChild(arrow);
+            }
+
+            stack.appendChild(frame);
+        }
+
+        function highlight(id) {
+            document.querySelectorAll(".frame").forEach(f => f.classList.remove("active"));
+            const f = document.getElementById(id);
+            if (f) f.classList.add("active");
+        }
+
+        function setReturnValue(id, value) {
+            const frame = document.getElementById(id);
+            frame.classList.add("complete");
+            frame.querySelector(".value").innerText = `return: ${value}`;
+        }
+
+        function animateCompute(id, n, returned, result) {
+            const frame = document.getElementById(id);
+            frame.classList.add("complete");
+
+            const v = frame.querySelector(".value");
+            v.innerHTML = `
+        <div class="compute-anim">${n} × ${returned} = ${result}</div>
+        return: ${result}
+    `;
+        }
+
+        function popFrame(id) {
+            const stack = document.getElementById("stack");
+            const frame = document.getElementById(id);
+            if (!frame) return;
+
+            const idx = Array.from(stack.children).indexOf(frame);
+
+            if (idx > 0 && stack.children[idx - 1].classList.contains("arrow")) {
+                stack.removeChild(stack.children[idx - 1]);
+            }
+
+            frame.remove();
+
+            if (stack.children.length === 0) {
+                document.getElementById("result").innerText = "Completed!";
+                autoMode = false;
+            }
+        }
+    </script>
+
+</body>
+
+</html>

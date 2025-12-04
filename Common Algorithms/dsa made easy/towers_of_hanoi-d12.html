@@ -1,0 +1,480 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Towers of Hanoi — Custom Sizes (Lift → Move → Drop)</title>
+    <style>
+        :root {
+            --accent: #4f46e5;
+            --muted: #64748b
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            font-family: Inter, system-ui, Segoe UI, Roboto, Arial;
+            background: linear-gradient(180deg, #f4f6fb, #e9eef7);
+            color: #0b1220
+        }
+
+        .wrap {
+            max-width: 1100px;
+            margin: 18px auto;
+            padding: 20px
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 20px
+        }
+
+        p.lead {
+            margin: 6px 0 12px;
+            color: #334155
+        }
+
+        .controls {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center
+        }
+
+        .controls input[type="number"],
+        .controls input[type="text"] {
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1
+        }
+
+        button {
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: none;
+            background: linear-gradient(90deg, var(--accent), #06b6d4);
+            color: white;
+            cursor: pointer;
+            font-weight: 700
+        }
+
+        button.secondary {
+            background: transparent;
+            border: 1px solid rgba(11, 18, 32, 0.06);
+            color: #102a43
+        }
+
+        .board {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+            height: 420px;
+            margin-top: 18px;
+            gap: 20px
+        }
+
+        .peg {
+            width: 220px;
+            height: 360px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 6px 18px rgba(2, 6, 23, 0.06);
+            position: relative;
+            padding-top: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center
+        }
+
+        .peg .rod {
+            width: 12px;
+            height: 260px;
+            background: linear-gradient(180deg, #59627a, #2b3440);
+            border-radius: 8px
+        }
+
+        .peg .base {
+            position: absolute;
+            left: 14px;
+            right: 14px;
+            height: 18px;
+            bottom: 12px;
+            background: linear-gradient(90deg, #edf2f7, #e2e8f0);
+            border-radius: 8px
+        }
+
+        /* Disks are absolutely positioned in document for smooth animations */
+        .disk {
+            position: absolute;
+            height: 34px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #071225;
+            box-shadow: 0 8px 20px rgba(11, 20, 34, 0.12);
+            transition: top 0.35s ease, left 0.35s ease
+        }
+
+        .disk .label {
+            font-size: 13px
+        }
+
+        .info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 12px;
+            color: #475569
+        }
+
+        .small {
+            font-size: 13px;
+            color: var(--muted)
+        }
+
+        .preview {
+            height: 64px;
+            border-radius: 8px;
+            object-fit: cover
+        }
+
+        @media (max-width:880px) {
+            .board {
+                gap: 12px
+            }
+
+            .peg {
+                width: 30vw
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <header>
+            <div>
+                <h1>Towers of Hanoi — Custom Sizes</h1>
+                <p class="lead">Enter sizes (comma separated) like <code>6,5,3</code> or leave empty to use 1..n. Lift →
+                    Move → Drop animation.</p>
+            </div>
+            <img class="preview" src="/mnt/data/03a72420-4b3d-4a7f-887c-bac9c4db6f29.png" alt="preview">
+        </header>
+
+        <div class="controls" style="margin-top:12px">
+            <label>Disk count:
+                <input id="diskCount" type="number" min="1" max="10" value="4">
+            </label>
+
+            <label>Custom sizes:
+                <input id="customSizes" type="text" placeholder="e.g. 6,5,3" style="width:200px">
+            </label>
+
+            <button id="startBtn">Start</button>
+            <button id="stepBtn" class="secondary">Step</button>
+            <button id="pauseBtn" class="secondary">Pause</button>
+            <button id="resetBtn" class="secondary">Reset</button>
+
+            <label style="margin-left:8px">Speed:
+                <input id="speed" type="range" min="120" max="1200" value="420">
+            </label>
+        </div>
+
+        <div class="board" id="board">
+            <div class="peg" id="pegA">
+                <div class="rod"></div>
+                <div class="base"></div>
+            </div>
+            <div class="peg" id="pegB">
+                <div class="rod"></div>
+                <div class="base"></div>
+            </div>
+            <div class="peg" id="pegC">
+                <div class="rod"></div>
+                <div class="base"></div>
+            </div>
+        </div>
+
+        <div class="info">
+            <div class="small">Moves: <strong id="moveCount">0</strong></div>
+            <div class="small">Optimal: <strong id="optMoves">0</strong></div>
+        </div>
+    </div>
+
+    <script>
+        /*
+          Behavior overview:
+          - If custom sizes textbox contains comma-separated numbers, those exact sizes are used.
+            Example: "6, 5, 3" (order can be any; we'll sort descending for stacking)
+          - Otherwise we use diskCount value to create sizes [n, n-1, ... ,1]
+          - Internally we compute ranks (1..m) where 1 = smallest. The recursive algorithm works on ranks.
+          - Moves list stores real sizes (the numbers the user entered). Peg arrays also store real sizes.
+          - Validation uses rank mapping (smaller rank => smaller disk).
+        */
+
+        const pegEls = { A: document.getElementById('pegA'), B: document.getElementById('pegB'), C: document.getElementById('pegC') };
+        const diskCountInput = document.getElementById('diskCount');
+        const customSizesInput = document.getElementById('customSizes');
+        const moveCountEl = document.getElementById('moveCount');
+        const optMovesEl = document.getElementById('optMoves');
+        const startBtn = document.getElementById('startBtn');
+        const stepBtn = document.getElementById('stepBtn');
+        const pauseBtn = document.getElementById('pauseBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const speedInput = document.getElementById('speed');
+
+        let state = {
+            sizesRealDesc: [],   // real sizes sorted descending (biggest first -> bottom)
+            sizesRealAsc: [],    // real sizes sorted ascending (smallest first) for mapping
+            rankMap: {},         // realSize -> rank (1 = smallest)
+            pegs: { A: [], B: [], C: [] }, // each holds real sizes (top is last element)
+            diskEls: {},         // realSize -> DOM element
+            moves: [],           // list of [from,to,realSize]
+            idx: 0,
+            running: false,
+            speed: Number(speedInput.value)
+        };
+
+        // utilities
+        function parseCustomSizes(input) {
+            if (!input) return null;
+            const parts = input.split(',').map(s => s.trim()).filter(Boolean);
+            if (parts.length === 0) return null;
+            const nums = parts.map(p => Number(p)).filter(n => Number.isFinite(n) && n > 0);
+            if (nums.length !== parts.length) return null; // some invalid
+            // ensure unique
+            const uniq = Array.from(new Set(nums));
+            if (uniq.length !== nums.length) return null;
+            return uniq;
+        }
+
+        function prepareSizes() {
+            const custom = parseCustomSizes(customSizesInput.value);
+            if (custom && custom.length > 0) {
+                // use provided sizes
+                // sort descending so largest is bottom
+                state.sizesRealDesc = [...custom].sort((a, b) => b - a);
+            } else {
+                const n = Math.max(1, Math.min(10, Number(diskCountInput.value) || 4));
+                // default sizes: n ... 1
+                state.sizesRealDesc = Array.from({ length: n }, (_, i) => n - i);
+            }
+            state.sizesRealAsc = [...state.sizesRealDesc].reverse(); // smallest first
+            state.rankMap = {};
+            state.sizesRealAsc.forEach((real, idx) => { state.rankMap[real] = idx + 1; }); // 1..m
+        }
+
+        function clearDisksFromDocument() {
+            document.querySelectorAll('.disk').forEach(d => d.remove());
+        }
+
+        function createDisksInDOM() {
+            clearDisksFromDocument();
+            state.diskEls = {};
+            const colors = ['#fef3c7', '#fde68a', '#ffd6a5', '#fbcfe8', '#c7f9cc', '#dbeafe', '#e0bbff', '#bbf7d0', '#ffc9de', '#ffe8cc'];
+
+            const min = Math.min(...state.sizesRealDesc);
+            const max = Math.max(...state.sizesRealDesc);
+            const m = state.sizesRealDesc.length;
+
+            for (let real of state.sizesRealDesc) {
+                const el = document.createElement('div');
+                el.className = 'disk';
+                el.dataset.real = real;
+                el.dataset.rank = state.rankMap[real];
+                // width normalized between 80 and 200
+                const norm = (real - min) / ((max - min) || 1);
+                el.style.width = Math.round(80 + norm * 140) + 'px';
+                const color = colors[(state.rankMap[real] - 1) % colors.length];
+                el.style.background = `linear-gradient(180deg, ${color}, ${shade(color, -12)})`;
+                el.innerHTML = `<div class="label">${real}</div>`;
+                // append to body because we animate absolute positions relative to document
+                document.body.appendChild(el);
+                state.diskEls[real] = el;
+            }
+        }
+
+        // shading helper (lighten/darken)
+        function shade(hex, percent) {
+            const c = hex.replace('#', '');
+            const num = parseInt(c, 16);
+            let r = (num >> 16) + Math.round(255 * percent / 100);
+            let g = ((num >> 8) & 0x00FF) + Math.round(255 * percent / 100);
+            let b = (num & 0x0000FF) + Math.round(255 * percent / 100);
+            r = Math.max(0, Math.min(255, r)); g = Math.max(0, Math.min(255, g)); b = Math.max(0, Math.min(255, b));
+            return '#' + ((r << 16) | (g << 8) | b).toString(16).padStart(6, '0');
+        }
+
+        // positions every disk based on current state.pegs
+        function positionAll() {
+            const centers = {};
+            ['A', 'B', 'C'].forEach(k => {
+                const r = pegEls[k].getBoundingClientRect();
+                centers[k] = { x: r.left + r.width / 2 + window.scrollX, y: r.top + r.height - 18 + window.scrollY };
+            });
+            ['A', 'B', 'C'].forEach(p => {
+                state.pegs[p].forEach((real, idx) => {
+                    const el = state.diskEls[real];
+                    if (!el) return;
+                    const x = centers[p].x - el.offsetWidth / 2;
+                    const y = centers[p].y - (idx * 36);
+                    el.style.left = x + 'px';
+                    el.style.top = y + 'px';
+                });
+            });
+        }
+
+        // recursive generator for ranks; returns list of ranks to move, but we convert ranks->real
+        function buildMovesListByRank(n, from, to, aux, list) {
+            if (n === 0) return;
+            buildMovesListByRank(n - 1, from, aux, to, list);
+            list.push([from, to, n]); // n is rank (1=smallest)
+            buildMovesListByRank(n - 1, aux, to, from, list);
+        }
+
+        function prepareMoves() {
+            const m = state.sizesRealDesc.length;
+            const listRank = [];
+            buildMovesListByRank(m, 'A', 'C', 'B', listRank);
+            // map rank -> real size (sizesRealAsc[rank-1])
+            state.moves = listRank.map(([from, to, rank]) => [from, to, state.sizesRealAsc[rank - 1]]);
+            state.idx = 0;
+            moveCountEl.textContent = '0';
+            optMovesEl.textContent = Math.pow(2, m) - 1;
+        }
+
+        // animate a single ranked move: move 'real' from->to
+        async function animateNext() {
+            if (state.idx >= state.moves.length) { state.running = false; return; }
+            const [from, to, real] = state.moves[state.idx];
+
+            // validation: top of source must be this real
+            const arrFrom = state.pegs[from];
+            if (arrFrom.length === 0) { alert('Algorithm error: source empty'); state.running = false; return; }
+            const topFrom = arrFrom[arrFrom.length - 1];
+            if (topFrom !== real) { alert('Algorithm mismatch: trying to move non-top disk'); state.running = false; return; }
+
+            // validation: cannot place larger on smaller => check ranks
+            const arrTo = state.pegs[to];
+            if (arrTo.length > 0) {
+                const topTo = arrTo[arrTo.length - 1];
+                if (state.rankMap[topTo] < state.rankMap[real]) { // topTo is smaller (rank smaller) and moving is larger -> illegal
+                    alert('Illegal move attempted by algorithm'); state.running = false; return;
+                }
+            }
+
+            await animateDiskMove(real, from, to);
+
+            // update logical state
+            state.pegs[from].pop();
+            state.pegs[to].push(real);
+            state.idx++;
+            moveCountEl.textContent = state.idx;
+        }
+
+        async function animateDiskMove(real, from, to) {
+            const el = state.diskEls[real];
+            if (!el) return;
+            // recompute centers (in case of resize/scroll)
+            const centers = {};
+            ['A', 'B', 'C'].forEach(k => {
+                const r = pegEls[k].getBoundingClientRect();
+                centers[k] = { x: r.left + r.width / 2 + window.scrollX, y: r.top + r.height - 18 + window.scrollY };
+            });
+            const start = centers[from], end = centers[to];
+            const liftY = Math.min(start.y, end.y) - 160;
+
+            // Step 1: lift
+            el.style.transition = `top ${state.speed / 1000}s ease`;
+            el.style.top = (liftY) + 'px';
+            await wait(state.speed + 10);
+
+            // Step 2: horizontal move
+            el.style.transition = `left ${state.speed / 1000}s ease`;
+            el.style.left = (end.x - el.offsetWidth / 2) + 'px';
+            await wait(state.speed + 10);
+
+            // Step 3: drop to new stack height (target stack before push)
+            const targetStack = state.pegs[to].length;
+            const dropY = end.y - (targetStack * 36);
+            el.style.transition = `top ${state.speed / 1000}s cubic-bezier(.2,.9,.28,1)`;
+            el.style.top = (dropY) + 'px';
+            await wait(state.speed + 10);
+        }
+
+        // small promise-based sleep
+        function wait(ms) { return new Promise(res => setTimeout(res, ms)); }
+
+        // UI actions
+        startBtn.addEventListener('click', () => { initAndStart(); });
+        stepBtn.addEventListener('click', async () => {
+            state.running = false;
+            state.speed = Number(speedInput.value);
+            if (state.moves.length === 0) prepareMoves();
+            await animateNext();
+        });
+        pauseBtn.addEventListener('click', () => { state.running = false; });
+        resetBtn.addEventListener('click', () => { init(false); });
+
+        async function initAndStart() {
+            init(true);
+            // start autoplay
+            if (state.moves.length === 0) prepareMoves();
+            state.running = true;
+            state.speed = Number(speedInput.value);
+            while (state.running && state.idx < state.moves.length) {
+                await animateNext();
+                await wait(80);
+            }
+        }
+
+        function init(autoplay = false) {
+            // prepare sizes and DOM
+            prepareSizes();
+
+            // reset peg arrays
+            state.pegs = { A: [], B: [], C: [] };
+            // place real sizes on A in descending order (biggest bottom)
+            for (let real of state.sizesRealDesc) state.pegs.A.push(real);
+
+            // create disk DOM elements
+            createDisksInDOM();
+
+            // position
+            setTimeout(() => { positionAll(); }, 30);
+
+            // prepare moves but don't start unless asked
+            prepareMoves();
+
+            // if autoplay requested, start loop
+            if (autoplay) {
+                state.running = true;
+                state.speed = Number(speedInput.value);
+            } else {
+                state.running = false;
+            }
+        }
+
+        // keep disks positioned on resize/scroll
+        window.addEventListener('resize', () => { positionAll(); });
+        window.addEventListener('scroll', () => { positionAll(); });
+
+        // initialize on load
+        window.addEventListener('load', () => { init(false); });
+
+        /* Optional: allow Enter key in customSizes input to start */
+        customSizesInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') { initAndStart(); } });
+
+    </script>
+</body>
+
+</html>
