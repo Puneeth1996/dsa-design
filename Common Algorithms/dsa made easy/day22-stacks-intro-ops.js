@@ -107,22 +107,22 @@ stackLL.push(100)
 stackLL.push(200)
 stackLL.push(300)
 console.log(stackLL.peek()) // 300
-console.log(stackLL.pop())  // 300
-console.log(stackLL.size)   // 2
+console.log(stackLL.pop()) // 300
+console.log(stackLL.size) // 2
 
 // Practical example: Undo/Redo functionality
 function undoRedoSystem() {
 	const undoStack = new StackLinkedList()
 	const redoStack = new StackLinkedList()
 	let currentState = 'initial'
-	
+
 	function execute(action) {
 		undoStack.push(currentState)
 		redoStack = new StackLinkedList() // Clear redo on new action
 		currentState = action
 		console.log(`Current: ${action}`)
 	}
-	
+
 	function undo() {
 		if (!undoStack.isEmpty()) {
 			redoStack.push(currentState)
@@ -130,7 +130,7 @@ function undoRedoSystem() {
 			console.log(`Undo to: ${currentState}`)
 		}
 	}
-	
+
 	function redo() {
 		if (!redoStack.isEmpty()) {
 			undoStack.push(currentState)
@@ -138,18 +138,18 @@ function undoRedoSystem() {
 			console.log(`Redo to: ${currentState}`)
 		}
 	}
-	
-	return { execute, undo, redo }
+
+	return {execute, undo, redo}
 }
 
 const editor = undoRedoSystem()
-editor.execute('typed hello')  // Current: typed hello
-editor.execute('added space')  // Current: added space
-editor.execute('typed world')  // Current: typed world
-editor.undo()                  // Undo to: added space
-editor.undo()                  // Undo to: typed hello
-editor.redo()                  // Redo to: added space
-editor.redo()                  // Redo to: typed world
+editor.execute('typed hello') // Current: typed hello
+editor.execute('added space') // Current: added space
+editor.execute('typed world') // Current: typed world
+editor.undo() // Undo to: added space
+editor.undo() // Undo to: typed hello
+editor.redo() // Redo to: added space
+editor.redo() // Redo to: typed world
 // More Stack Examples
 
 // 1. Enhanced Balanced Parentheses (multiple bracket types)
@@ -168,8 +168,8 @@ Time: O(n), Space: O(n)
 */
 function isBalancedBrackets(str) {
 	const stack = new StackArray()
-	const pairs = { '(': ')', '[': ']', '{': '}' }
-	
+	const pairs = {'(': ')', '[': ']', '{': '}'}
+
 	for (let char of str) {
 		if (pairs[char]) {
 			stack.push(char)
@@ -182,9 +182,9 @@ function isBalancedBrackets(str) {
 	return stack.isEmpty()
 }
 
-console.log(isBalancedBrackets('({[]})'))   // true
-console.log(isBalancedBrackets('([)]'))     // false
-console.log(isBalancedBrackets('{[()]}'))   // true
+console.log(isBalancedBrackets('({[]})')) // true
+console.log(isBalancedBrackets('([)]')) // false
+console.log(isBalancedBrackets('{[()]}')) // true
 
 // 2. Infix to Postfix Conversion
 /*
@@ -204,9 +204,9 @@ Time: O(n), Space: O(n)
 */
 function infixToPostfix(infix) {
 	const stack = new StackArray()
-	const precedence = { '+': 1, '-': 1, '*': 2, '/': 2 }
+	const precedence = {'+': 1, '-': 1, '*': 2, '/': 2}
 	let postfix = ''
-	
+
 	for (let char of infix) {
 		if (/[a-zA-Z0-9]/.test(char)) {
 			postfix += char
@@ -218,23 +218,26 @@ function infixToPostfix(infix) {
 			}
 			stack.pop() // Remove '('
 		} else if (precedence[char]) {
-			while (!stack.isEmpty() && precedence[stack.peek()] >= precedence[char]) {
+			while (
+				!stack.isEmpty() &&
+				precedence[stack.peek()] >= precedence[char]
+			) {
 				postfix += stack.pop()
 			}
 			stack.push(char)
 		}
 	}
-	
+
 	while (!stack.isEmpty()) {
 		postfix += stack.pop()
 	}
-	
+
 	return postfix
 }
 
-console.log(infixToPostfix('a+b*c'))     // abc*+
-console.log(infixToPostfix('(a+b)*c'))   // ab+c*
-console.log(infixToPostfix('a+b*c-d'))   // abc*+d-
+console.log(infixToPostfix('a+b*c')) // abc*+
+console.log(infixToPostfix('(a+b)*c')) // ab+c*
+console.log(infixToPostfix('a+b*c-d')) // abc*+d-
 
 // 3. Evaluate Postfix Expression
 /*
@@ -252,7 +255,7 @@ Time: O(n), Space: O(n)
 */
 function evaluatePostfix(postfix) {
 	const stack = new StackArray()
-	
+
 	for (let char of postfix) {
 		if (/\d/.test(char)) {
 			stack.push(parseInt(char))
@@ -260,20 +263,28 @@ function evaluatePostfix(postfix) {
 			const b = stack.pop()
 			const a = stack.pop()
 			switch (char) {
-				case '+': stack.push(a + b); break
-				case '-': stack.push(a - b); break
-				case '*': stack.push(a * b); break
-				case '/': stack.push(Math.floor(a / b)); break
+				case '+':
+					stack.push(a + b)
+					break
+				case '-':
+					stack.push(a - b)
+					break
+				case '*':
+					stack.push(a * b)
+					break
+				case '/':
+					stack.push(Math.floor(a / b))
+					break
 			}
 		}
 	}
-	
+
 	return stack.pop()
 }
 
-console.log(evaluatePostfix('23*4+'))   // 10 (2*3+4)
-console.log(evaluatePostfix('52-3*'))   // 9 ((5-2)*3)
-console.log(evaluatePostfix('123*+'))   // 7 (1+2*3)
+console.log(evaluatePostfix('23*4+')) // 10 (2*3+4)
+console.log(evaluatePostfix('52-3*')) // 9 ((5-2)*3)
+console.log(evaluatePostfix('123*+')) // 7 (1+2*3)
 // 4. Min Stack - Stack that tracks minimum element in O(1)
 // Uses auxiliary stack to maintain minimum at each level
 /*
@@ -294,38 +305,41 @@ class MinStack {
 		this.stack = []
 		this.minStack = [] // Tracks minimum at each level
 	}
-	
+
 	push(value) {
 		this.stack.push(value)
 		// Push current min (either new value or previous min)
-		const currentMin = this.minStack.length === 0 ? value : Math.min(value, this.getMin())
+		const currentMin =
+			this.minStack.length === 0 ? value : Math.min(value, this.getMin())
 		this.minStack.push(currentMin)
 	}
-	
+
 	pop() {
 		if (this.stack.length === 0) return null
 		this.minStack.pop()
 		return this.stack.pop()
 	}
-	
+
 	top() {
 		return this.stack.length === 0 ? null : this.stack[this.stack.length - 1]
 	}
-	
+
 	getMin() {
-		return this.minStack.length === 0 ? null : this.minStack[this.minStack.length - 1]
+		return this.minStack.length === 0
+			? null
+			: this.minStack[this.minStack.length - 1]
 	}
 }
 
 // Usage: Track minimum in stock prices
 const minStack = new MinStack()
-minStack.push(100)  // Min: 100
-minStack.push(80)   // Min: 80
-minStack.push(120)  // Min: 80
+minStack.push(100) // Min: 100
+minStack.push(80) // Min: 80
+minStack.push(120) // Min: 80
 console.log(minStack.getMin()) // 80
-minStack.pop()      // Remove 120, Min still: 80
+minStack.pop() // Remove 120, Min still: 80
 console.log(minStack.getMin()) // 80
-minStack.pop()      // Remove 80, Min now: 100
+minStack.pop() // Remove 80, Min now: 100
 console.log(minStack.getMin()) // 100
 
 // 5. Monotonic Stack - Maintains elements in sorted order
@@ -346,7 +360,7 @@ Time: O(n), Space: O(n)
 function nextGreaterElements(arr) {
 	const result = new Array(arr.length).fill(-1)
 	const stack = [] // Stores indices, maintains decreasing order
-	
+
 	for (let i = 0; i < arr.length; i++) {
 		// Pop elements smaller than current (they found their next greater)
 		while (stack.length > 0 && arr[stack[stack.length - 1]] < arr[i]) {
@@ -355,12 +369,12 @@ function nextGreaterElements(arr) {
 		}
 		stack.push(i) // Push current index
 	}
-	
+
 	return result
 }
 
 // Usage: Find next greater element for each position
-console.log(nextGreaterElements([4, 5, 2, 25]))  // [5, 25, 25, -1]
+console.log(nextGreaterElements([4, 5, 2, 25])) // [5, 25, 25, -1]
 console.log(nextGreaterElements([13, 7, 6, 12])) // [-1, 12, 12, -1]
 
 // Daily temperatures problem using monotonic stack
@@ -381,16 +395,19 @@ Time: O(n), Space: O(n)
 function dailyTemperatures(temperatures) {
 	const result = new Array(temperatures.length).fill(0)
 	const stack = [] // Decreasing monotonic stack of indices
-	
+
 	for (let i = 0; i < temperatures.length; i++) {
 		// Find all previous days that are cooler than today
-		while (stack.length > 0 && temperatures[stack[stack.length - 1]] < temperatures[i]) {
+		while (
+			stack.length > 0 &&
+			temperatures[stack[stack.length - 1]] < temperatures[i]
+		) {
 			const prevDay = stack.pop()
 			result[prevDay] = i - prevDay // Days to wait
 		}
 		stack.push(i)
 	}
-	
+
 	return result
 }
 
